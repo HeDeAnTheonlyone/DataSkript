@@ -1,29 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 
 
 char* getContents(FILE *file) {
 
+    char *contents = malloc(200 * sizeof(char));
+    fgets(contents, sizeof(200 * sizeof(char)), file);
+
+    return contents;
 }
 
 
 typedef struct {
     int pos;
     char *context;
-    char *type;
+    Type type;
 } Token;
 
 
-Token* createToken(int pos, char *ctx, char *type) {
+Token* createToken(int pos, char *ctx, Type type) {
 
     Token *t = malloc(sizeof(Token));
     
     if (t != NULL) {
         t->pos = pos;
         t->context = strdup(ctx);
-        t->type = strdup(type);
     }
 
     return t;
@@ -33,28 +37,50 @@ Token* createToken(int pos, char *ctx, char *type) {
 void destroyToken(Token *t) {
 
     free(t->context);
-    free(t->type);
     free(t);
 }
 
 
 
-char* lex(char *projPath) {
+typedef enum {
+    ENDOFLINE,
+    WHITESPACE,
+    DIGIT,
+    LITERAL,
+    FUNCTION
+} Type;
 
-    char filePath = projPath;
-    strcat(filePath, "/main.ds");
 
-    FILE *file = fopen(filePath, "r");
 
-    //TODO
+Token* lex(char *line) {
 
-    return "";
+    int position = 0;
+
+    if (position >= strlen(line))
+        return createToken(position, "", ENDOFLINE);
+
+    if (isspace(*(line + position))) {
+        int start = position;
+        while (isspace(*(line + position))) {
+            position++;
+        }
+    }
+
+    if (isdigit(*(line + position))) {
+        int start = position;
+        while (isdigit(*(line + position))) {
+            position++;
+        }
+        char *subString;
+        return createToken(start, memcpy(subString, *(line + start), position - start), DIGIT);
+    }
+
+        
 }
 
 
 
 int parse(Token *tokens) {
-
     return 0;
 }
 
@@ -74,7 +100,20 @@ int main() {
         return 0;
     }
 
-    printf("Parsing: %d", parse(lex(in)));
+    char filePath = in;
+    strcat(filePath, "/main.ds");
+
+    FILE *file = fopen(filePath, "r");
+
+    char *line;
+    while (line = getContents(file) != NULL) {
+
+        parse(lex(line));
+
+        //TODO
+    }
+
+    fclose(file);
 
     return 0;
 }
