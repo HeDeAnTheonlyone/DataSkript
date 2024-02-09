@@ -64,6 +64,8 @@ Token* lex(char *line) {
         while (isspace(*(line + position))) {
             position++;
         }
+        char *substring;
+        return createToken(start, memcpy(substring, *(line - start), position - start), WHITESPACE);
     }
 
     if (isdigit(*(line + position))) {
@@ -75,12 +77,26 @@ Token* lex(char *line) {
         return createToken(start, memcpy(subString, *(line + start), position - start), DIGIT);
     }
 
-        
+    if (isalpha(*(line + position))) {
+        int start = position;
+        while (isalpha(*(line + position))) {
+            position++;
+        }
+        char *substring;
+        return createToken(start, memcpy(substring, *(line + start), position - start), LITERAL);
+    }
+}
+
+
+
+void addTokenToArr(Toke) {
+    //TODO
 }
 
 
 
 int parse(Token *tokens) {
+    //TODO
     return 0;
 }
 
