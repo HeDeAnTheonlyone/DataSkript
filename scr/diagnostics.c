@@ -23,9 +23,9 @@ void compileStatus(char *_file, int _line, int _position, bool err) {
 
 
 
-void printErr(char *msg) {
+void error(char *msg) {
         system("color 0C");
         printf("%s", msg);
         system("color 0A");
-        return;
+        exit(1);
     }
