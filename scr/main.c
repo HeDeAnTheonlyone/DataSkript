@@ -16,18 +16,14 @@ int main() {
     printf("Input DataSkript Project Path: ");
 
     char *inPath = malloc(1024 * sizeof(char));
-    if (inPath == NULL) {
-        printErr("Input pointer memory allocation failed!");
-        return 1;
-    }
+    if (inPath == NULL)
+        error("Input pointer memory allocation failed!");
 
     fgets(inPath, 1024, stdin);
     inPath[strcspn(inPath, "\n")] = '\0';
 
-    if (strlen(inPath) < 1) {
-        printErr("No project folder path given!");
-        return 1;
-    }
+    if (strlen(inPath) < 1)
+        error("No project folder path given!");
 
     char *filePath = inPath;
     strcat(filePath, "/main.ds");
@@ -38,25 +34,26 @@ int main() {
     size_t lnBuffer = 2048;
     char *line = malloc(lnBuffer * sizeof(char));
 
-    if (file == NULL) {
-        printErr("Directory with the give path or main file does not exist!");
-        return 1;
-    }
+    if (file == NULL)
+        error("Directory with the give path or main file does not exist!");
 
-    fgets(line, lnBuffer, file);
-    while (line != NULL) {
+    while (fgets(line, lnBuffer, file) != NULL)
+    {
         lex(line);
 
         // TODO
-
-        fgets(line, lnBuffer, file);
     }
+
+    printf("test");
 
     free(line);
     line = NULL;
     
     free(inPath);
     fclose(file);
+
+    printf("\n\n\nPress ENTER to exit...");
+    getchar();
 
     return 0;
 }
@@ -77,7 +74,7 @@ void lex(char *line) {
         if (token == NULL)
             return;
 
-        printf("TOKEN ===> %d | %s | %s", token->pos, token->context, getTypeName(token->type));
+        printf("TOKEN ===> %d | %s | %s\n", token->pos, *token->context, getTypeName(token->type));
 
     } while (token->type != ENDOFLINE);
 

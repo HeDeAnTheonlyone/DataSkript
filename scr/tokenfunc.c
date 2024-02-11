@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -42,11 +43,12 @@ const char* getTypeName(type_t type) {
 token_t* createToken(int pos, char *ctx, type_t _type) {
     token_t *t = malloc(sizeof(token_t));
 
-    if (t != NULL) {
-        t->pos = pos;
-        t->context = strdup(ctx);
-        t->type = _type;
-    }
+    if (t == NULL)
+        error("Failed to allocate token memory");
+
+    t->pos = pos;
+    t->context = ctx;
+    t->type = _type;
 
     return t;
 }
@@ -72,24 +74,39 @@ token_t* nextToken(char *line, int *position) {
         while (isspace(line[pos])) {
             pos++;
         }
-        char *substring;
-        token = createToken(start, memcpy(substring, line + start, pos - start), WHITESPACE);
+        char *substring = malloc((pos - start + 1) * sizeof(char));
+        if (substring == NULL)
+            error("Failed to allocate token context memory");
+
+        memcpy(substring, line + start, pos - start);
+
+        token = createToken(start + 1, substring, WHITESPACE);
     }
     else if (isdigit(line[pos])) {
         int start = pos;
         while (isdigit(line[pos])) {
             pos++;
         }
-        char *subString;
-        token = createToken(start, memcpy(subString, line + start, pos - start), DIGIT);
+        char *substring = malloc((pos - start + 1) * sizeof(char));
+        if (substring == NULL)
+            error("Failed to allocate token context memory");
+
+        memcpy(substring, line + start, pos - start);
+
+        token = createToken(start + 1, substring, DIGIT);
     }
     else if (isalpha(line[pos])) {
         int start = pos;
         while (isalpha(line[pos])) {
             pos++;
         }
-        char *substring;
-        token = createToken(start, memcpy(substring, line + start, pos - start), LITERAL);
+        char *substring = malloc((pos - start + 1) * sizeof(char));
+        if (substring == NULL)
+            error("Failed to allocate token context memory");
+
+        memcpy(substring, line + start, pos - start);
+
+        token = createToken(start + 1, substring, LITERAL);
     }
 
     if (token == NULL)
