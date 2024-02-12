@@ -8,7 +8,7 @@
 
 
 
-const char* getTypeName(type_t type);
+char* getTypeName(type_t type);
 
 token_t* createToken(int pos, char *ctx, type_t type);
 
@@ -20,7 +20,7 @@ void addTokenToArr(token_t *token);
 
 
 
-const char* getTypeName(type_t type) {
+char* getTypeName(type_t type) {
     switch (type) {
         case ENDOFLINE:
             return "ENDOFLINE";
