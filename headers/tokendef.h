@@ -15,6 +15,4 @@ typedef struct {
     type_t type;
 } token_t;
 
-const char *getTypeName(type_t type);
-
 #endif

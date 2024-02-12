@@ -18,6 +18,8 @@ void compileStatus(char *_file, int _line, int _position, bool err) {
     if (err) {
         system("color 0C");
         printf("Compile Error in %s, at %d:%d", file, line, position);
+        system("color CA");
+        exit(1);
     }
 }
 

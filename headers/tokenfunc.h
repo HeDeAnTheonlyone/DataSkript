@@ -3,7 +3,7 @@
 
 #include "tokendef.h"
 
-const char *getTypeName(type_t type);
+char* getTypeName(type_t type);
 
 token_t *createToken(int pos, char *ctx, type_t type);
 
